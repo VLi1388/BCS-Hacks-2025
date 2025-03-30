@@ -2,31 +2,8 @@ import { useState, useEffect } from "react";
 import ProfileCard, { UserProfile } from "@/components/ProfileCard";
 import Navbar from "@/components/Navbar";
 import Layout from "@/components/Layout";
-import ash from "@/assets/ash.png";
-import hatsune from "@/assets/hatsune.png";
 import { useNavigate } from "react-router-dom";
-import ChatWidget from "@/components/ChatWidget"; // Import the chat widget
-
-const matchedProfiles: UserProfile[] = [
-  {
-    id: "1",
-    name: "Ash",
-    age: 24,
-    bio: "Competitive gamer and strategy expert. Always up for a challenge!",
-    avatar: ash,
-    hobbies: ["Gaming", "Strategy", "Esports"],
-    location: "New York, NY",
-  },
-  {
-    id: "2",
-    name: "Hatsune",
-    age: 22,
-    bio: "Music producer and rhythm game lover. Let's jam and game together!",
-    avatar: hatsune,
-    hobbies: ["Music", "Rhythm Games", "Singing"],
-    location: "Tokyo, Japan",
-  },
-];
+import ChatWidget from "@/components/ChatWidget";
 
 const MatchesPage = () => {
   const [matches, setMatches] = useState<UserProfile[]>([]);
@@ -36,11 +13,10 @@ const MatchesPage = () => {
   const [messages, setMessages] = useState<Message[]>([]);
 
   const handleSelectConversation = (id: string) => {
-    const partner = matchedProfiles.find((profile) => profile.id === id);
+    const partner = matches.find((profile) => profile.id === id);
     if (partner) {
       setSelectedPartner(partner);
-      // Fetch messages for the selected partner
-      setMessages([]); // Mocked empty messages for now
+      setMessages([]);
     }
   };
 
@@ -59,7 +35,9 @@ const MatchesPage = () => {
   };
 
   useEffect(() => {
-    setMatches(matchedProfiles);
+    const stored = sessionStorage.getItem("matches");
+    const data: UserProfile[] = stored ? JSON.parse(stored) : [];
+    setMatches(data);
   }, []);
 
   return (
@@ -82,7 +60,7 @@ const MatchesPage = () => {
                 profile={match}
                 showActions={false}
                 showConnect={true}
-                onMessage={handleSelectConversation} // Pass the function as a prop
+                onMessage={handleSelectConversation}
               />
             ))
           ) : (
@@ -98,7 +76,6 @@ const MatchesPage = () => {
         </div>
       </div>
 
-      {/* Chat Widget */}
       {selectedPartner && (
         <ChatWidget
           partner={selectedPartner}
