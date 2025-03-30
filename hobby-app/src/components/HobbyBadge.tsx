@@ -21,6 +21,11 @@ const HobbyBadge = ({
     Music: "bg-game-pink",
     Reading: "bg-game-yellow",
     Sports: "bg-game-red",
+    Photography: "bg-game-blue",
+    Gardening: "bg-game-green",
+    Crafting: "bg-game-orange",
+    Dancing: "bg-game-purple",
+    Writing: "bg-game-pink",
   };
 
   const defaultColor = "bg-game-blue";
@@ -30,7 +35,7 @@ const HobbyBadge = ({
     <button
       onClick={onClick}
       className={cn(
-        "px-3 py-1 text-xs font-pixel text-white transition-all",
+        "px-3 py-1 text-xs font-pixel text-white transition-all border-2 m-border-black shadow-[3px_3px_0px_0px_black]",
         active
           ? `${bgColor} pixel-borders`
           : "bg-gray-200 border-2 border-gray-400",
