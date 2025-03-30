@@ -78,22 +78,29 @@ const ProfileCard = ({
           <h3 className="font-pixel text-3 mb-2 text-game-black">
             {profile.name}, {profile.age}
           </h3>
-          <p className="font-pixel text-5 mt-1 text-game-black">
+          <p className="font-pixel text- mt-3 text-game-black">
             {profile.location}
           </p>
         </div>
       </div>
 
-      <div className="mb-4">
-        <p className="font-pixel text-4 mb-2 text-game-black">{profile.bio}</p>
+      <div className="mb-8">
+        <p className="font-pixel text-sm mb-2 text-game-black">{profile.bio}</p>
       </div>
 
       <div className="mb-40">
-        <h4 className="font-pixel text-sm mb-2 text-game-black">HOBBIES</h4>
-        <div className="flex flex-wrap gap-2">
-          {profile.hobbies.map((hobby) => (
-            <HobbyBadge key={hobby} hobby={hobby} active />
-          ))}
+        <h4 className="font-pixel text-sm mb-5 text-game-black">HOBBIES</h4>
+        <div className="bg-[#BCD8C1] p-4 rounded-xl">
+          <div className="flex flex-wrap gap-2">
+            {profile.hobbies.map((hobby) => (
+              <HobbyBadge
+                key={hobby}
+                hobby={hobby}
+                active
+                className="bg-[#7FB069]"
+              />
+            ))}
+          </div>
         </div>
       </div>
 
