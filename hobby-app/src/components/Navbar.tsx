@@ -5,7 +5,7 @@ const Navbar = () => {
   const location = useLocation();
 
   const navItems = [
-    { icon: <Search className="w-6 h-6" />, label: "Discover", path: "/" },
+    { icon: <Search className="w-6 h-6" />, label: "Discover", path: "/discover" },
     { icon: <Heart className="w-6 h-6" />, label: "Matches", path: "/matches" },
     {
       icon: <MessageCircle className="w-6 h-6" />,
