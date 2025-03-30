@@ -1,17 +1,16 @@
 import { Link, useLocation } from "react-router-dom";
-import { Heart, Search, User, MessageCircle } from "lucide-react";
+import { Heart, Search, User } from "lucide-react";
 
 const Navbar = () => {
   const location = useLocation();
 
   const navItems = [
-    { icon: <Search className="w-6 h-6" />, label: "Discover", path: "/discover" },
-    { icon: <Heart className="w-6 h-6" />, label: "Matches", path: "/matches" },
     {
-      icon: <MessageCircle className="w-6 h-6" />,
-      label: "Messages",
-      path: "/messages",
+      icon: <Search className="w-6 h-6" />,
+      label: "Discover",
+      path: "/discover",
     },
+    { icon: <Heart className="w-6 h-6" />, label: "Matches", path: "/matches" },
     { icon: <User className="w-6 h-6" />, label: "Profile", path: "/profile" },
   ];
 

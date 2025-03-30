@@ -3,26 +3,27 @@ import { useParams, useNavigate } from "react-router-dom";
 import MessageBox, { Message, ChatPartner } from "./../components/MessageBox";
 import { ArrowLeft } from "lucide-react";
 import { UserProfile } from "./../components/ProfileCard";
+import ash from "@/assets/ash.png";
+import hatsune from "@/assets/hatsune.png";
+import Layout from "../components/Layout";
+import userIcon from "@/assets/userIcon.jpg";
 
-// Mock matched profiles (same as in Matches.tsx)
 const matchedProfiles: UserProfile[] = [
   {
     id: "1",
-    name: "Alex",
+    name: "Ash",
     age: 28,
     bio: "Enthusiastic gamer and hiking lover. Looking for people to game with or explore trails!",
-    avatar:
-      "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=150&h=150&q=80",
+    avatar: ash,
     hobbies: ["Gaming", "Hiking", "Cooking"],
     location: "Seattle, WA",
   },
   {
     id: "5",
-    name: "Riley",
+    name: "Hatsune",
     age: 29,
     bio: "Music producer and gamer. Let's game together or collaborate on tracks!",
-    avatar:
-      "https://images.unsplash.com/photo-1500673922987-e212871fec22?auto=format&fit=crop&w=150&h=150&q=80",
+    avatar: hatsune,
     hobbies: ["Music", "Gaming", "Art"],
     location: "Austin, TX",
   },
@@ -80,7 +81,6 @@ const MessageDetailPage = () => {
   useEffect(() => {
     if (!id) return;
 
-    // In a real app, these would be API calls
     const foundPartner = matchedProfiles.find((profile) => profile.id === id);
 
     if (foundPartner) {
@@ -121,24 +121,42 @@ const MessageDetailPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
-      <header className="py-4 px-4 flex items-center border-b-4 border-game-black">
-        <button onClick={handleBack} className="p-2 mr-4">
-          <ArrowLeft className="w-6 h-6" />
-        </button>
+    <>
+      <Layout />
+      <div className="min-h-screen bg-white flex flex-col">
+        <header className="py-4 px-4 flex items-center border-b-4 border-game-black">
+          <button onClick={handleBack} className="p-2 mr-4">
+            <ArrowLeft className="w-6 h-6" />
+          </button>
 
-        <h1 className="font-pixel text-xl text-game-black">Chat</h1>
-      </header>
+          <h1 className="font-pixel text-xl text-game-black">Chat</h1>
+        </header>
 
-      <main className="flex-1 overflow-hidden">
-        <MessageBox
-          messages={messages}
-          currentUserId="current-user"
-          partner={partner}
-          onSendMessage={handleSendMessage}
-        />
-      </main>
-    </div>
+        <main className="flex-1 overflow-hidden flex flex-col items-center px-4">
+          {/* Profile Section */}
+          <div className="flex flex-col items-center border-b-2 pb-4">
+            <img
+              src={partner.avatar}
+              alt={partner.name}
+              className="w-24 h-24 rounded-full mb-2"
+            />
+            <h2 className="font-pixel text-2xl">{partner.name}</h2>
+            <p className="text-center text-sm text-gray-600">{partner.bio}</p>
+            <div className="mt-2 text-sm text-gray-500">
+              <span>{partner.location}</span>
+            </div>
+          </div>
+
+          {/* Message Box */}
+          <MessageBox
+            messages={messages}
+            currentUserId="current-user"
+            partner={partner}
+            onSendMessage={handleSendMessage}
+          />
+        </main>
+      </div>
+    </>
   );
 };
 
