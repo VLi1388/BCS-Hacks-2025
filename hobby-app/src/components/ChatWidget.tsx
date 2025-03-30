@@ -35,7 +35,7 @@ const ChatWidget = ({
             alt={partner.name}
             className="w-8 h-8 rounded-full"
           />
-          <h3 className="font-pixel text-lg">{partner.name}</h3>
+          <h3 className="font-pixel text-lg text-gray-500">{partner.name}</h3>
         </div>
         <button onClick={onClose}>
           <X className="w-5 h-6 text-gray-500" />

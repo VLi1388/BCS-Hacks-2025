@@ -2,7 +2,7 @@ import { useState } from "react";
 import PixelAvatar from "./PixelAvatar";
 import HobbyBadge from "./HobbyBadge";
 import PixelButton from "./PixelButton";
-import { Heart, X, MessageCircle } from "lucide-react";
+import { Heart, X, MessageCircle, Trash } from "lucide-react";
 
 export type UserProfile = {
   id: string;
@@ -19,6 +19,7 @@ type ProfileCardProps = {
   onLike: (id: string) => void;
   onPass: (id: string) => void;
   onMessage?: (id: string) => void;
+  onRemove?: (id: string) => void; // Make sure onRemove is passed as a prop
   showActions?: boolean;
   showConnect?: boolean;
 };
@@ -28,6 +29,7 @@ const ProfileCard = ({
   onLike,
   onPass,
   onMessage,
+  onRemove,
   showActions = true,
   showConnect = false,
 }: ProfileCardProps) => {
@@ -56,6 +58,10 @@ const ProfileCard = ({
 
   const handleMessage = () => {
     onMessage?.(profile.id);
+  };
+
+  const handleRemove = () => {
+    if (onRemove) onRemove(profile.id); // Call the onRemove handler
   };
 
   return (
@@ -125,7 +131,7 @@ const ProfileCard = ({
       )}
 
       {showConnect && (
-        <div className="flex justify-center mt-4">
+        <div className="flex justify-center mt-4 gap-4">
           <PixelButton
             variant="primary"
             onClick={handleMessage}
@@ -133,6 +139,16 @@ const ProfileCard = ({
           >
             <MessageCircle className="w-4 h-4" /> Message
           </PixelButton>
+
+          {onRemove && (
+            <PixelButton
+              variant="danger"
+              onClick={handleRemove}
+              className="flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white"
+            >
+              <Trash className="w-4 h-4" /> Remove
+            </PixelButton>
+          )}
         </div>
       )}
     </div>
