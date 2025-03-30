@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -72,19 +72,18 @@ button:focus-visible {
 }
 
 .font-pixel {
-  font-family: 'Press Start 2P', cursive;
+  font-family: "Press Start 2P", cursive;
 }
 
 .text-game-black {
-  --tw-text-opacity: 1;     
-  color: rgb(43 43 43 / var(--tw-text-opacity, 1)); 
+  --tw-text-opacity: 1;
+  color: rgb(43 43 43 / var(--tw-text-opacity, 1));
 }
 
 .profile-container {
   text-align: center;
   font-family: "Press Start 2P", sans-serif;
 }
-
 
 .profile-card {
   display: inline-block;
@@ -100,10 +99,31 @@ button:focus-visible {
   align-items: center;
 }
 
-.bg-game-blue {     --tw-bg-opacity: 1;     background-color: rgb(77 151 255 / var(--tw-bg-opacity, 1)); }
-.bg-game-green {  --tw-bg-opacity: 1;     background-color: rgb(99 199 77 / var(--tw-bg-opacity, 1)); }
-.bg-game-yellow {     --tw-bg-opacity: 1;     background-color: rgb(254 231 97 / var(--tw-bg-opacity, 1)); }
-.bg-game-orange {     --tw-bg-opacity: 1;     background-color: rgb(255 159 57 / var(--tw-bg-opacity, 1)); }
-.bg-game-red {     --tw-bg-opacity: 1;     background-color: rgb(228 59 68 / var(--tw-bg-opacity, 1)); }
-.bg-game-pink {     --tw-bg-opacity: 1;     background-color: rgb(246 148 193 / var(--tw-bg-opacity, 1)); }
-.bg-game-purple {     --tw-bg-opacity: 1;     background-color: rgb(155 93 229 / var(--tw-bg-opacity, 1)); }
+.bg-game-blue {
+  --tw-bg-opacity: 1;
+  background-color: rgb(77 151 255 / var(--tw-bg-opacity, 1));
+}
+.bg-game-green {
+  --tw-bg-opacity: 1;
+  background-color: rgb(99 199 77 / var(--tw-bg-opacity, 1));
+}
+.bg-game-yellow {
+  --tw-bg-opacity: 1;
+  background-color: rgb(254 231 97 / var(--tw-bg-opacity, 1));
+}
+.bg-game-orange {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 159 57 / var(--tw-bg-opacity, 1));
+}
+.bg-game-red {
+  --tw-bg-opacity: 1;
+  background-color: rgb(228 59 68 / var(--tw-bg-opacity, 1));
+}
+.bg-game-pink {
+  --tw-bg-opacity: 1;
+  background-color: rgb(246 148 193 / var(--tw-bg-opacity, 1));
+}
+.bg-game-purple {
+  --tw-bg-opacity: 1;
+  background-color: rgb(155 93 229 / var(--tw-bg-opacity, 1));
+}
