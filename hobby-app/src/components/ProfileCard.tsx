@@ -1,6 +1,6 @@
 import { useState } from "react";
 import PixelAvatar from "./PixelAvatar";
-import HobbyBadge from "./HobbyBadge.tsx";
+import HobbyBadge from "./HobbyBadge";
 import PixelButton from "./PixelButton";
 import { Heart, X, MessageCircle } from "lucide-react";
 
@@ -69,28 +69,38 @@ const ProfileCard = ({
                   : "translate-x-[-100%] opacity-0"
               }`
             : ""
-        }`}
+        }
+        bg-white border border-gray-300 shadow-lg rounded-xl p-4`}
     >
-      <div className="flex items-center gap-4 mb-4">
+      <div className="flex items-center gap-4 mb-5">
         <PixelAvatar src={profile.avatar} alt={profile.name} size="lg" />
         <div>
-          <h3 className="font-pixel text-lg text-game-black">
+          <h3 className="font-pixel text-3 mb-2 text-game-black">
             {profile.name}, {profile.age}
           </h3>
-          <p className="text-sm mt-1">{profile.location}</p>
+          <p className="font-pixel text- mt-3 text-game-black">
+            {profile.location}
+          </p>
         </div>
       </div>
 
-      <div className="mb-4">
-        <p className="text-sm mb-2">{profile.bio}</p>
+      <div className="mb-8">
+        <p className="font-pixel text-sm mb-2 text-game-black">{profile.bio}</p>
       </div>
 
-      <div className="mb-6">
-        <h4 className="font-pixel text-sm mb-2 text-game-black">HOBBIES</h4>
-        <div className="flex flex-wrap gap-2">
-          {profile.hobbies.map((hobby) => (
-            <HobbyBadge key={hobby} hobby={hobby} active />
-          ))}
+      <div className="mb-40">
+        <h4 className="font-pixel text-sm mb-5 text-game-black">HOBBIES</h4>
+        <div className="bg-[#BCD8C1] p-4 rounded-xl">
+          <div className="flex flex-wrap gap-2">
+            {profile.hobbies.map((hobby) => (
+              <HobbyBadge
+                key={hobby}
+                hobby={hobby}
+                active
+                className="bg-[#7FB069]"
+              />
+            ))}
+          </div>
         </div>
       </div>
 
@@ -99,17 +109,17 @@ const ProfileCard = ({
           <PixelButton
             variant="danger"
             onClick={handlePass}
-            className="rounded-full flex items-center justify-center w-12 h-12 p-0"
+            className="rounded-full flex items-center justify-center w-12 h-12 p-0 bg-red-500 hover:bg-red-600 transition-all"
           >
-            <X className="w-6 h-6" />
+            <X className="w-6 h-6 text-white" />
           </PixelButton>
 
           <PixelButton
             variant="success"
             onClick={handleLike}
-            className="rounded-full flex items-center justify-center w-12 h-12 p-0"
+            className="rounded-full flex items-center justify-center w-12 h-12 p-0 bg-green-500 hover:bg-green-600 transition-all"
           >
-            <Heart className="w-6 h-6" />
+            <Heart className="w-6 h-6 text-white" />
           </PixelButton>
         </div>
       )}
@@ -119,7 +129,7 @@ const ProfileCard = ({
           <PixelButton
             variant="primary"
             onClick={handleMessage}
-            className="flex items-center justify-center gap-2"
+            className="flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white"
           >
             <MessageCircle className="w-4 h-4" /> Message
           </PixelButton>

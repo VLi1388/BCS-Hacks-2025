@@ -15,6 +15,8 @@ export type ChatPartner = {
   id: string;
   name: string;
   avatar?: string;
+  bio?: string;
+  location?: string;
 };
 
 type MessageBoxProps = {

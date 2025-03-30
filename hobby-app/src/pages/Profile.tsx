@@ -8,9 +8,18 @@ import Layout from "@/components/Layout";
 import { getCurrentUser, updateUser, logoutUser, User } from '@/lib/userService';
 
 const allHobbies = [
-  "Gaming", "Hiking", "Cooking", "Art", 
-  "Music", "Reading", "Sports", "Photography",
-  "Gardening", "Crafting", "Dancing", "Writing"
+  "Gaming",
+  "Hiking",
+  "Cooking",
+  "Art",
+  "Music",
+  "Reading",
+  "Sports",
+  "Photography",
+  "Gardening",
+  "Crafting",
+  "Dancing",
+  "Writing",
 ];
 
 const ProfilePage = () => {
@@ -126,6 +135,7 @@ const ProfilePage = () => {
                       <span>✓</span>
                   </div>
               </div>
+
               <div>
                   <h3 className="font-pixel text-2xl text-game-black mb-1">
                       {name}, <span className="text-game-blue">{age}</span>
