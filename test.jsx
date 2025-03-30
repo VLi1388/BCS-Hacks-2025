@@ -1,24 +1,15 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import MatchConfirm from "../components/MatchConfirm";
-import { mockProfiles, UserProfile } from "@/mock/mockProfiles";
+import { mockProfiles } from "../mock/mockProfiles";
 import bg from "./discoverBckgrd.png";
 import HobbyBadge from "@/components/HobbyBadge";
-import TriviaBox from "@/components/TriviaBox";
-import { triviaQuestions } from "@/mock/triviaQuestions";
 
 const DiscoverPage = () => {
   const [opponentIndex, setOpponentIndex] = useState(0);
   const opponent = mockProfiles[opponentIndex];
-  const [profiles, setProfiles] = useState<UserProfile[]>([]);
-  const [currentProfileIndex, setCurrentProfileIndex] = useState(0);
-  const [inTrivia, setInTrivia] = useState(false);
-  const [questionIndex, setQuestionIndex] = useState(0);
-  const [score, setScore] = useState(0);
-
-  useEffect(() => {
-    setProfiles(mockProfiles);
-  }, []);
+  const navigate = useNavigate();
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -27,79 +18,13 @@ const DiscoverPage = () => {
     };
   }, []);
 
-  const currentProfile = profiles[currentProfileIndex];
-
   const handleConfirm = () => {
-    setInTrivia(true);
-    setQuestionIndex(0);
-    setScore(0);
+    navigate("/messages");
   };
 
   const handleCancel = () => {
     setOpponentIndex((prev) => (prev + 1) % mockProfiles.length);
   };
-
-  const addMatchToSession = (profile: UserProfile) => {
-    const stored = sessionStorage.getItem("matches");
-    const existing = stored ? JSON.parse(stored) : [];
-    const updated = [
-      ...existing.filter((p: UserProfile) => p.id !== profile.id),
-      profile,
-    ];
-    sessionStorage.setItem("matches", JSON.stringify(updated));
-  };
-
-  const handleTriviaAnswer = (isCorrect: boolean) => {
-    const newScore = Math.max(0, isCorrect ? score + 1 : score - 1);
-    setScore(newScore);
-
-    if (questionIndex < triviaQuestions.length - 1) {
-      setQuestionIndex((prev) => prev + 1);
-    } else {
-      if (newScore >= 5 && currentProfile) {
-        addMatchToSession(currentProfile);
-      }
-      moveToNextProfile();
-    }
-  };
-
-  const moveToNextProfile = () => {
-    if (currentProfileIndex < profiles.length - 1) {
-      setCurrentProfileIndex((prev) => prev + 1);
-    } else {
-      setProfiles([]);
-    }
-    setInTrivia(false);
-    setScore(0);
-    setQuestionIndex(0);
-  };
-
-  const renderMatchMeter = () => (
-    <div className="flex justify-center mb-4">
-      <div className="relative flex flex-col-reverse h-64 w-8 border-4 border-game-black bg-white shadow-[4px_4px_0_#000] p-1 gap-[2px]">
-        {[...Array(10)].map((_, i) => {
-          let colorClass = "bg-gray-200";
-
-          if (i < score) {
-            if (score >= 5) {
-              colorClass = "bg-game-green";
-            } else if (score === 4) {
-              colorClass = "bg-game-yellow";
-            } else {
-              colorClass = "bg-game-red";
-            }
-          }
-
-          return (
-            <div
-              key={i}
-              className={`flex-1 w-full ${colorClass} transition-all duration-300`}
-            />
-          );
-        })}
-      </div>
-    </div>
-  );
 
   return (
     <div className="relative min-h-screen w-full">
@@ -112,22 +37,6 @@ const DiscoverPage = () => {
           overflow: "hidden",
         }}
       />
-
-<main>
-        {inTrivia && currentProfile ? (
-          <div className="flex justify-center items-start gap-4 mt-6">
-            <TriviaBox
-              question={triviaQuestions[questionIndex]}
-              onAnswerSubmit={handleTriviaAnswer}
-            />
-            {renderMatchMeter()}
-          </div>
-        ) : currentProfile ? (
-          <>
-
-
-
-
 
       {/* Opponent Speech Bubble */}
       <div className="fixed max-w-sm top-4 left-[450px] z-10">
@@ -225,16 +134,6 @@ const DiscoverPage = () => {
       <div className="fixed bottom-[100px] left-1/2 -translate-x-1/2">
         <MatchConfirm onConfirm={handleConfirm} onCancel={handleCancel} />
       </div>
-
-
-
-      </>
-        ) : (
-          <div className="text-center mt-20 font-pixel text-xl text-game-black">
-            No more profiles!
-          </div>
-        )}
-      </main>
 
       <Navbar />
     </div>
