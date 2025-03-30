@@ -5,11 +5,12 @@ import { mockProfiles, UserProfile } from "@/mock/mockProfiles";
 import bg from "./discoverBckgrd.png";
 import HobbyBadge from "@/components/HobbyBadge";
 import TriviaBox from "@/components/TriviaBox_with_api";
-import { getCurrentUser } from "@/lib/userService";
+// import { getCurrentUser } from "@/lib/userService";
 import { generateTriviaQuestion } from "@/utils/generateTrivia";
 import { TriviaQuestion } from "@/mock/triviaQuestions";
 import { isAnswerSimilar } from "@/utils/isAnswerSimilar";
 import { mockOpponentAnswers } from "@/mock/mockOpponentAnswers";
+import { getCurrentUser, updateUser } from "@/lib/userService";
 
 const DiscoverPage = () => {
   const [profiles, setProfiles] = useState<UserProfile[]>([]);
@@ -79,13 +80,19 @@ const DiscoverPage = () => {
   };
 
   const addMatchToSession = (profile: UserProfile) => {
-    const stored = sessionStorage.getItem("matches");
-    const existing = stored ? JSON.parse(stored) : [];
-    const updated = [
-      ...existing.filter((p: UserProfile) => p.id !== profile.id),
-      profile,
-    ];
-    sessionStorage.setItem("matches", JSON.stringify(updated));
+    const user = getCurrentUser();
+    if (!user) return;
+
+    const alreadyMatched = user.matching?.includes(profile.id);
+    if (alreadyMatched) return;
+
+    const updatedUser = {
+      ...user,
+      matching: [...(user.matching || []), profile.id],
+    };
+
+    updateUser(updatedUser);
+    console.log("✅ Match added:", profile.name);
   };
 
   const handleTriviaAnswer = async (userAnswer: string) => {
