@@ -35,6 +35,10 @@ const MatchesPage = () => {
   );
   const [messages, setMessages] = useState<Message[]>([]);
 
+  const handleRemove = (id: string) => {
+    setMatches((prev) => prev.filter((profile) => profile.id !== id)); // Remove profile from matches
+  };
+
   const handleSelectConversation = (id: string) => {
     const partner = matchedProfiles.find((profile) => profile.id === id);
     if (partner) {
@@ -82,7 +86,8 @@ const MatchesPage = () => {
                 profile={match}
                 showActions={false}
                 showConnect={true}
-                onMessage={handleSelectConversation} // Pass the function as a prop
+                onMessage={handleSelectConversation}
+                onRemove={handleRemove} // Pass the onRemove prop
               />
             ))
           ) : (
