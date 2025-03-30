@@ -12,7 +12,6 @@ const DiscoverPage = () => {
   const [inTrivia, setInTrivia] = useState(false);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
-  // const [matches, setMatches] = useState<UserProfile[]>([]);
 
   useEffect(() => {
     setProfiles(mockProfiles);
@@ -37,6 +36,16 @@ const DiscoverPage = () => {
     setCurrentProfileIndex((prev) => (prev + 1) % mockProfiles.length);
   };
 
+  const addMatchToSession = (profile: UserProfile) => {
+    const stored = sessionStorage.getItem("matches");
+    const existing = stored ? JSON.parse(stored) : [];
+    const updated = [
+      ...existing.filter((p: UserProfile) => p.id !== profile.id),
+      profile,
+    ];
+    sessionStorage.setItem("matches", JSON.stringify(updated));
+  };
+
   const handleTriviaAnswer = (isCorrect: boolean) => {
     const newScore = Math.max(0, isCorrect ? score + 1 : score - 1);
     setScore(newScore);
@@ -45,7 +54,7 @@ const DiscoverPage = () => {
       setQuestionIndex((prev) => prev + 1);
     } else {
       if (newScore >= 5 && currentProfile) {
-        // setMatches((prev) => [...prev, currentProfile]);
+        addMatchToSession(currentProfile);
       }
       moveToNextProfile();
     }
@@ -64,26 +73,33 @@ const DiscoverPage = () => {
 
   const renderMatchMeter = () => (
     <div className="flex justify-center mb-4">
-      <div className="relative flex flex-col-reverse h-64 w-8 border-4 border-game-black bg-white shadow-[4px_4px_0_#000] overflow-hidden">
-        {[...Array(10)].map((_, i) => (
-          <div
-            key={i}
-            className={`w-full flex-1 transition-all duration-300 ${
-              i < score
-                ? score >= 5
-                  ? "bg-game-red"
-                  : "bg-game-green"
-                : "bg-gray-200"
-            }`}
-          />
-        ))}
+      <div className="relative flex flex-col-reverse h-64 w-8 border-4 border-game-black bg-white shadow-[4px_4px_0_#000] p-1 gap-[2px]">
+        {[...Array(10)].map((_, i) => {
+          let colorClass = "bg-gray-200";
+
+          if (i < score) {
+            if (score >= 5) {
+              colorClass = "bg-game-green";
+            } else if (score === 4) {
+              colorClass = "bg-game-yellow";
+            } else {
+              colorClass = "bg-game-red";
+            }
+          }
+
+          return (
+            <div
+              key={i}
+              className={`flex-1 w-full ${colorClass} transition-all duration-300`}
+            />
+          );
+        })}
       </div>
     </div>
   );
 
   return (
     <div className="relative min-h-screen w-full">
-      {/* Background image fills the whole screen */}
       <div
         className="fixed inset-0 bg-contain bg-center bg-no-repeat overflow-hidden -z-10"
         style={{
@@ -103,8 +119,7 @@ const DiscoverPage = () => {
           </div>
         ) : currentProfile ? (
           <>
-            {/* Opponent Info */}
-            <div className="absolute top-4 left-4 bg-game-white border-4 border-black px-4 py-3 shadow-[4px_4px_0_#333333">
+            <div className="absolute top-4 left-4 bg-game-white border-4 border-black px-4 py-3 shadow-[4px_4px_0_#333333]">
               <div className="flex items-center gap-2">
                 <h2 className="text-xl font-bold">{currentProfile.name},</h2>
                 <span className="text-lg font-bold">{currentProfile.age}</span>
@@ -122,26 +137,22 @@ const DiscoverPage = () => {
               </div>
             </div>
 
-            {/* Opponent Avatar */}
             <img
               src={currentProfile.avatar}
               alt={currentProfile.name}
               className="absolute top-36 right-20 w-16 h-16"
             />
 
-            {/* User Avatar */}
             <img
               src="https://archives.bulbagarden.net/media/upload/9/9a/Spr_RS_May.png"
               alt="You"
               className="absolute bottom-32 left-20 w-20 h-20"
             />
 
-            {/* User Info */}
             <div className="absolute bottom-44 right-16 bg-game-white border-4 border-black px-4 py-2 shadow-[4px_4px_0_#333333]">
               <span className="font-bold text-lg">Bob, 24</span>
             </div>
 
-            {/* Match Confirmation */}
             <div className="absolute insert-x-0 bottom-[130px] left-1/2 -translate-x-1/2">
               <MatchConfirm onConfirm={handleConfirm} onCancel={handleCancel} />
             </div>

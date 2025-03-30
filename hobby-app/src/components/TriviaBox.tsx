@@ -15,7 +15,7 @@ const TriviaBox = ({ question, onAnswerSubmit }: TriviaBoxProps) => {
   const [userAnswer, setUserAnswer] = useState("");
   const [phase, setPhase] = useState<"answering" | "revealing">("answering");
   const [wasCorrect, setWasCorrect] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(10);
+  const [timeLeft, setTimeLeft] = useState(5);
 
   // Countdown timer
   useEffect(() => {
@@ -41,7 +41,7 @@ const TriviaBox = ({ question, onAnswerSubmit }: TriviaBoxProps) => {
         setUserAnswer("");
         setWasCorrect(false);
         setPhase("answering");
-        setTimeLeft(10);
+        setTimeLeft(5);
       }, 5000);
       return () => clearTimeout(revealTimer);
     }
@@ -53,7 +53,7 @@ const TriviaBox = ({ question, onAnswerSubmit }: TriviaBoxProps) => {
       trimmed.toLowerCase() === question.opponentAnswer.toLowerCase();
     setWasCorrect(isCorrect);
     setPhase("revealing");
-    setTimeLeft(5);
+    setTimeLeft(3);
   };
 
   return (
