@@ -89,7 +89,7 @@ const LoginPage = () => {
       {/* Logo and Title */}
       <div className="text-center mb-5">
         <h1 className="font-pixel text-5xl text-game-white mb-2 drop-shadow-[2px_2px_0px_rgba(0,0,0,0.3)]">
-          Hobby Connect
+          EvoMatch
         </h1>
         <p className="text-game-white font-pixel text-md">Find friends with shared interests!</p>
       </div>
@@ -287,7 +287,7 @@ const LoginPage = () => {
       
       {/* Footer */}
       <footer className="text-center mt-8 text-game-white text-xs font-pixel">
-        Hobby Connect • Share Your Passion
+        EvoMatch • Share Your Passion
       </footer>
     </div>
   );

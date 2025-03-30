@@ -269,7 +269,7 @@ const ProfilePage = () => {
           
           {/* Footer */}
           <footer className="text-center mt-10 mb-10 pb-10 text-gray-500 text-xs font-pixel">
-              Hobby Connect • Share Your Passion
+            EvoMatch • Share Your Passion
           </footer>
       </div>
     </>  
