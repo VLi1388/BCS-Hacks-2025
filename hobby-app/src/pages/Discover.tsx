@@ -6,19 +6,37 @@ import bg from "./discoverBckgrd.png";
 import HobbyBadge from "@/components/HobbyBadge";
 import TriviaBox from "@/components/TriviaBox";
 import { triviaQuestions } from "@/mock/triviaQuestions";
+import { getCurrentUser, updateUser } from "@/lib/userService";
 
 const DiscoverPage = () => {
-  const [opponentIndex, setOpponentIndex] = useState(0);
-  const opponent = mockProfiles[opponentIndex];
-  const [profiles, setProfiles] = useState<UserProfile[]>([]);
+  // Use a single index for tracking the current profile
   const [currentProfileIndex, setCurrentProfileIndex] = useState(0);
+  const [profiles, setProfiles] = useState<UserProfile[]>([]);
   const [inTrivia, setInTrivia] = useState(false);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
+  const [currentUser, setCurrentUser] = useState(getCurrentUser());
+  
+  // Get current opponent from the filtered profiles array
+  const currentOpponent = profiles.length > currentProfileIndex ? profiles[currentProfileIndex] : null;
 
   useEffect(() => {
-    setProfiles(mockProfiles);
-  }, []);
+    // If there's a current user, filter out already matched profiles
+    if (currentUser && currentUser.matching) {
+      // Filter profiles to remove those that are already matched
+      const filteredProfiles = mockProfiles.filter(
+        profile => !currentUser.matching?.includes(profile.id)
+      );
+      setProfiles(filteredProfiles);
+      console.log('Filtered profiles:', filteredProfiles.length, 'Available to match');
+    } else {
+      // No user or no matches, just show all profiles
+      setProfiles(mockProfiles);
+    }
+    
+    // Reset index when profiles change
+    setCurrentProfileIndex(0);
+  }, [currentUser]);
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -27,26 +45,57 @@ const DiscoverPage = () => {
     };
   }, []);
 
+  // Get the current profile for the trivia game
   const currentProfile = profiles[currentProfileIndex];
 
   const handleConfirm = () => {
+    if (!currentOpponent) return; // Don't proceed if opponent is null
     setInTrivia(true);
     setQuestionIndex(0);
     setScore(0);
   };
 
   const handleCancel = () => {
-    setOpponentIndex((prev) => (prev + 1) % mockProfiles.length);
+    // Don't do anything if no profiles
+    if (profiles.length === 0) return;
+    
+    // Move to next opponent
+    const nextIndex = (currentProfileIndex + 1) % profiles.length;
+    setCurrentProfileIndex(nextIndex);
+    
+    // Log for debugging
+    console.log('Moving to next profile:', nextIndex, 'Name:', profiles[nextIndex]?.name);
   };
 
   const addMatchToSession = (profile: UserProfile) => {
-    const stored = sessionStorage.getItem("matches");
-    const existing = stored ? JSON.parse(stored) : [];
-    const updated = [
-      ...existing.filter((p: UserProfile) => p.id !== profile.id),
-      profile,
-    ];
-    sessionStorage.setItem("matches", JSON.stringify(updated));
+    if (!currentUser) return;
+    
+    // Log for debugging
+    console.log('Adding match:', profile.name, 'with ID:', profile.id);
+    
+    // Initialize matching array if it doesn't exist
+    if (!currentUser.matching) {
+      currentUser.matching = [];
+    }
+    
+    // Add profile ID to matching if not already there
+    if (!currentUser.matching.includes(profile.id)) {
+      // Create a new matching array with the new ID added
+      const updatedMatching = [...currentUser.matching, profile.id];
+      
+      // Update the user
+      const updatedUser = {
+        ...currentUser,
+        matching: updatedMatching
+      };
+      
+      // Save the updated user
+      updateUser(updatedUser);
+      setCurrentUser(updatedUser);
+      
+      // Confirm match was added
+      console.log('Match added to user:', currentUser.name, 'Updated matching IDs:', updatedMatching);
+    }
   };
 
   const handleTriviaAnswer = (isCorrect: boolean) => {
@@ -56,8 +105,16 @@ const DiscoverPage = () => {
     if (questionIndex < triviaQuestions.length - 1) {
       setQuestionIndex((prev) => prev + 1);
     } else {
-      if (newScore >= 5 && currentProfile) {
-        addMatchToSession(currentProfile);
+      // Trivia complete, check score
+      console.log('Trivia complete! Score:', newScore);
+      
+      // Check if scored high enough (5+) to create a match
+      if (newScore >= 5 && currentOpponent) {
+        console.log('Score high enough to match with:', currentOpponent.name);
+        // Add the opponent (the visible player) to matches
+        addMatchToSession(currentOpponent);
+      } else {
+        console.log('Score not high enough for match or no opponent');
       }
       moveToNextProfile();
     }
@@ -65,8 +122,13 @@ const DiscoverPage = () => {
 
   const moveToNextProfile = () => {
     if (currentProfileIndex < profiles.length - 1) {
-      setCurrentProfileIndex((prev) => prev + 1);
+      // Update the index to the next profile
+      const nextIndex = currentProfileIndex + 1;
+      setCurrentProfileIndex(nextIndex);
+      console.log('Moving to next profile after trivia:', nextIndex, 'Name:', profiles[nextIndex]?.name);
     } else {
+      // No more profiles to show
+      console.log('No more profiles to show');
       setProfiles([]);
     }
     setInTrivia(false);
@@ -122,7 +184,7 @@ const DiscoverPage = () => {
             />
             {renderMatchMeter()}
           </div>
-        ) : currentProfile ? (
+        ) : currentOpponent ? (
           <>
             {/* Opponent Speech Bubble */}
             <div className="fixed max-w-sm top-4 left-[450px] z-10">
@@ -134,22 +196,22 @@ const DiscoverPage = () => {
                 }}
               >
                 {/* Avatar */}
-                {opponent.avatar && (
+                {currentOpponent.avatar && (
                   <img
-                    src={opponent.avatar}
-                    alt={`${opponent.name}'s avatar`}
+                    src={currentOpponent.avatar}
+                    alt={`${currentOpponent.name}'s avatar`}
                     className="w-12 h-12 rounded mb-2 border-[2px] border-black"
                   />
                 )}
 
                 {/* Name and Age */}
                 <p className="font-pixel mb-1">
-                  {opponent.name}, {opponent.age}
+                  {currentOpponent.name}, {currentOpponent.age}
                 </p>
 
                 {/* Hobby badges */}
                 <div className="flex flex-wrap gap-2 mt-2">
-                  {opponent.hobbies.map((hobby) => (
+                  {currentOpponent.hobbies.map((hobby) => (
                     <HobbyBadge key={hobby} hobby={hobby} readOnly />
                   ))}
                 </div>
@@ -169,10 +231,10 @@ const DiscoverPage = () => {
 
             <div className="fixed bottom-[260px] right-[360px]">
               {/* Figurine */}
-              {opponent.figurine && (
+              {currentOpponent.figurine && (
                 <img
-                  src={opponent.figurine}
-                  alt={`${opponent.name}'s figurine`}
+                  src={currentOpponent.figurine}
+                  alt={`${currentOpponent.name}'s figurine`}
                   className="w-96 h-96"
                 />
               )}
@@ -188,7 +250,9 @@ const DiscoverPage = () => {
                 }}
               >
                 {/* Name and Age */}
-                <p className="font-pixel mb-1">Victoria, 24</p>
+                <p className="font-pixel mb-1">
+                  {currentUser ? `${currentUser.name}, ${currentUser.age}` : "Player"}
+                </p>
               </div>
 
               {/* Tail triangle on bottom-right */}

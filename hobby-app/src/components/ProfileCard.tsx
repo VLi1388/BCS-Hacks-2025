@@ -7,7 +7,7 @@ import { Heart, X, MessageCircle, Trash } from "lucide-react";
 export type UserProfile = {
   id: string;
   name: string;
-  age: number;
+  age: string;
   bio: string;
   avatar?: string;
   hobbies: string[];

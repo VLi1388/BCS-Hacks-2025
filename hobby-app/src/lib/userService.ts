@@ -1,5 +1,6 @@
 // Import initial user data from JSON file
 import initialUserData from '../mock/userPassword.json';
+import { UserProfile } from '../mock/mockProfiles';
 
 // Types for user data
 export interface User {
@@ -12,6 +13,8 @@ export interface User {
   bio: string;
   hobbies: string[];
   avatar?: string;
+  figurine?: string;
+  matching?: string[]; // Array of user IDs that this user has matched with
 }
 
 // Key for localStorage

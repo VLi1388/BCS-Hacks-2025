@@ -1,19 +1,62 @@
 import { useState, useEffect } from "react";
-import ProfileCard, { UserProfile } from "@/components/ProfileCard";
+import ProfileCard from "@/components/ProfileCard";
 import Navbar from "@/components/Navbar";
 import Layout from "@/components/Layout";
 import { useNavigate } from "react-router-dom";
 import ChatWidget from "@/components/ChatWidget";
+import { getCurrentUser, updateUser, getUsers } from "@/lib/userService";
+import { Message } from "@/components/MessageBox";
+import { UserProfile } from "@/mock/mockProfiles";
 
 const MatchesPage = () => {
+  const [currentUser, setCurrentUser] = useState<UserProfile | null>(getCurrentUser());
   const [matches, setMatches] = useState<UserProfile[]>([]);
-  const [selectedPartner, setSelectedPartner] = useState<UserProfile | null>(
-    null
-  );
+  const [selectedPartner, setSelectedPartner] = useState<UserProfile | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if user is logged in
+    if (!currentUser) {
+      navigate('/');
+      return;
+    }
+    
+    // Load matches from current user's matching IDs
+    if (currentUser.matching && currentUser.matching.length > 0) {
+      // Get all users to find matches by ID
+      const allUsers = getUsers();
+      
+      // Find full user profiles for each matching ID
+      const matchedProfiles = currentUser.matching
+        .map((id: string) => allUsers.find(user => user.id === id))
+        .filter((user): user is UserProfile => !!user);
+      
+      setMatches(matchedProfiles);
+    }
+  }, [currentUser, navigate]);
 
   const handleRemove = (id: string) => {
-    setMatches((prev) => prev.filter((profile) => profile.id !== id)); // Remove profile from matches
+    // 1. Update local state
+    setMatches((prev) => prev.filter((profile) => profile.id !== id));
+    
+    // 2. Update user's matching data
+    if (currentUser && currentUser.matching) {
+      // Filter out the removed ID from the matching array
+      const updatedMatching = currentUser.matching.filter((matchId: string) => matchId !== id);
+      
+      // Create updated user object
+      const updatedUser = {
+        ...currentUser,
+        matching: updatedMatching
+      };
+      
+      // Update user data in storage
+      updateUser(updatedUser);
+      
+      // Update local current user state
+      setCurrentUser(updatedUser);
+    }
   };
 
   const handleSelectConversation = (id: string) => {
@@ -38,12 +81,6 @@ const MatchesPage = () => {
     }
   };
 
-  useEffect(() => {
-    const stored = sessionStorage.getItem("matches");
-    const data: UserProfile[] = stored ? JSON.parse(stored) : [];
-    setMatches(data);
-  }, []);
-
   return (
     <>
       <Layout />
@@ -56,7 +93,7 @@ const MatchesPage = () => {
           People who share your hobbies
         </p>
 
-        <div className="w-full max-w-md space-y-6">
+        <div className="w-full max-w-md space-y-6 mb-10">
           {matches.length > 0 ? (
             matches.map((match) => (
               <ProfileCard

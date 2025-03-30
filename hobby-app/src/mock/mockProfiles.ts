@@ -11,7 +11,7 @@ export interface UserProfile {
   hobbies: string[];
   avatar?: string;
   figurine?: string;
-  figurine?: string;
+  matching: string[]; // Store IDs instead of full objects to avoid circular reference
 }
 
 export const mockProfiles: UserProfile[] = [
@@ -26,6 +26,7 @@ export const mockProfiles: UserProfile[] = [
     figurine: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png", // Bulbasaur
     hobbies: ["Gaming", "Hiking", "Cooking"],
     location: "Seattle, WA",
+    matching: [],
   },
   {
     id: "2",
@@ -37,6 +38,7 @@ export const mockProfiles: UserProfile[] = [
     figurine: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png", // Charmander
     hobbies: ["Art", "Music", "Reading"],
     location: "Portland, OR",
+    matching: [],
   },
   {
     id: "3",
@@ -49,6 +51,7 @@ export const mockProfiles: UserProfile[] = [
     figurine: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/7.png", // Squirtle
     hobbies: ["Sports", "Cooking", "Gaming"],
     location: "San Francisco, CA",
+    matching: [],
   },
   {
     id: "4",
@@ -60,6 +63,7 @@ export const mockProfiles: UserProfile[] = [
     figurine: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png", // Pikachu
     hobbies: ["Reading", "Hiking", "Art"],
     location: "Denver, CO",
+    matching: [],
   },
   {
     id: "5",
@@ -72,5 +76,6 @@ export const mockProfiles: UserProfile[] = [
     figurine: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/39.png", // Jigglypuff
     hobbies: ["Music", "Gaming", "Art"],
     location: "Austin, TX",
+    matching: [],
   },
 ];
