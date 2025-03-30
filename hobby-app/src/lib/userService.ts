@@ -1,6 +1,5 @@
 // Import initial user data from JSON file
-import initialUserData from '../mock/userPassword.json';
-import { UserProfile } from '../mock/mockProfiles';
+import initialUserData from "../mock/userPassword.json";
 
 // Types for user data
 export interface User {
@@ -18,8 +17,8 @@ export interface User {
 }
 
 // Key for localStorage
-const USER_STORAGE_KEY = 'userPassword_data';
-const CURRENT_USER_KEY = 'currentUser';
+const USER_STORAGE_KEY = "userPassword_data";
+const CURRENT_USER_KEY = "currentUser";
 
 // Initialize data in localStorage if not already present
 const initializeData = () => {
@@ -34,10 +33,10 @@ initializeData();
 // Get all users from storage
 export const getUsers = (): User[] => {
   try {
-    const data = JSON.parse(localStorage.getItem(USER_STORAGE_KEY) || '{}');
+    const data = JSON.parse(localStorage.getItem(USER_STORAGE_KEY) || "{}");
     return data.users || [];
   } catch (error) {
-    console.error('Error loading users:', error);
+    console.error("Error loading users:", error);
     return [];
   }
 };
@@ -48,7 +47,7 @@ export const saveUsers = (users: User[]) => {
     const data = { users };
     localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(data));
   } catch (error) {
-    console.error('Error saving users:', error);
+    console.error("Error saving users:", error);
   }
 };
 
@@ -56,54 +55,56 @@ export const saveUsers = (users: User[]) => {
 export const loginUser = (username: string, password: string): User | null => {
   const users = getUsers();
   const user = users.find(
-    (u) => u.username.toLowerCase() === username.toLowerCase() && u.password === password
+    (u) =>
+      u.username.toLowerCase() === username.toLowerCase() &&
+      u.password === password
   );
-  
+
   if (user) {
     // Store current user username
     localStorage.setItem(CURRENT_USER_KEY, user.username);
     return user;
   }
-  
+
   return null;
 };
 
 // Register new user
-export const registerUser = (userData: Omit<User, 'id'>): User => {
+export const registerUser = (userData: Omit<User, "id">): User => {
   const users = getUsers();
-  
+
   // Check if username already exists
   const existingUser = users.find(
     (u) => u.username.toLowerCase() === userData.username.toLowerCase()
   );
-  
+
   if (existingUser) {
-    throw new Error('Username already exists');
+    throw new Error("Username already exists");
   }
-  
+
   // Create new user with generated ID
   const newUser: User = {
     ...userData,
     id: (users.length + 1).toString(), // Simple ID generation
   };
-  
+
   // Add to users array and save
   const updatedUsers = [...users, newUser];
   saveUsers(updatedUsers);
-  
+
   // Set as current user
   localStorage.setItem(CURRENT_USER_KEY, newUser.username);
-  
+
   return newUser;
 };
 
 // Update user data
 export const updateUser = (userData: User): User => {
   const users = getUsers();
-  const updatedUsers = users.map((user) => 
+  const updatedUsers = users.map((user) =>
     user.username === userData.username ? userData : user
   );
-  
+
   saveUsers(updatedUsers);
   return userData;
 };
@@ -118,7 +119,7 @@ export const getUserByUsername = (username: string): User | null => {
 export const getCurrentUser = (): User | null => {
   const username = localStorage.getItem(CURRENT_USER_KEY);
   if (!username) return null;
-  
+
   return getUserByUsername(username);
 };
 
