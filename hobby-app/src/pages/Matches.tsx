@@ -86,10 +86,10 @@ const MatchesPage = () => {
       <Layout />
       <Navbar />
       <div className="flex flex-col items-center text-center px-4 py-6">
-        <h1 className="font-pixel text-4xl text-game-black mb-2 drop-shadow-[2px_2px_0px_rgba(0,0,0,0.3)]">
+        <h1 className="font-pixel text-4xl text-game-white mb-2 drop-shadow-[2px_2px_0px_rgba(0,0,0,0.3)]">
           Your Matches
         </h1>
-        <p className="text-game-black font-pixel text-sm mb-6">
+        <p className="text-game-white font-pixel text-sm mb-6">
           People who share your hobbies
         </p>
 
@@ -107,10 +107,10 @@ const MatchesPage = () => {
             ))
           ) : (
             <div className="pixel-card flex flex-col items-center justify-center p-8">
-              <h2 className="font-pixel text-xl text-game-black mb-4">
+              <h2 className="font-pixel text-xl text-game-white mb-4">
                 No matches yet!
               </h2>
-              <p className="text-center mb-6">
+              <p className="text-game-white text-center mb-6">
                 Keep exploring profiles to find people who share your interests.
               </p>
             </div>
