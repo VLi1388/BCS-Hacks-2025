@@ -80,6 +80,11 @@ button:focus-visible {
   color: rgb(43 43 43 / var(--tw-text-opacity, 1)); 
 }
 
+.text-game-white {     
+  --tw-text-opacity: 1;     
+  color: rgb(245 245 245 / var(--tw-text-opacity, 1)); 
+}
+
 .profile-container {
   text-align: center;
   font-family: "Press Start 2P", sans-serif;

@@ -12,6 +12,7 @@
   "dependencies": {
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "fs-extra": "^11.3.0",
     "lucide-react": "^0.485.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -19,6 +20,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
+    "@types/fs-extra": "^11.0.4",
     "@types/node": "^22.5.5",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
